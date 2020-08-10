@@ -1,0 +1,86 @@
+<h1 class="title">Nueva maquina virtual</h1>
+<div class="section">
+  <%= simple_form_for @post do |f| %>
+    <div class="field">
+      <div class="control">
+        <%= f.input :title, input_html: { class: 'input' }, wrapper: false, label_html: { class: 'label' } %>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <%= f.input :content, input_html: { class: 'textarea' }, wrapper: false, label_html: { class: 'label' } %>
+      </div>
+    </div>
+    <%= f.button :submit, 'New post', class: "button is-primary" %>
+
+    <div class="section">
+      <table>
+        <tr>
+          <td>
+            <h2 style="padding-bottom:0.2cm;vertical-align: middle;"><strong>Sistema Operativo</strong></h2>
+          </td>
+          <td>
+            <div class="control">
+              <div class="select">
+                <select>
+                  <option>Centos 6</option>
+                  <option>Ubuntu</option>
+                </select>
+              </div>
+            </div>
+          </td>
+          <td style="vertical-align: middle;">
+            <label class="label" style="float:left;vertical-align: middle;">Memoria RAM</label>
+          </td>
+          <td style="vertical-align: middle;">
+            <input class="input" style="float:left;" type="text" placeholder="Gigabytes">
+          </td>
+          <td style="vertical-align: middle;">
+            <div class="control" style="vertical-align: middle;">
+              <label class="label" ">Numero de equipos</label>
+          </td>
+          <td>
+              <div class="select">
+                <select>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>10</option>
+                </select>
+              </div>
+          </td>
+            </div>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2 style="padding-bottom:0.2cm;"><strong>Aplicaciones pre-instaladas</strong></h2>
+      <div class="box" style="display: inline-block">
+        <label class="checkbox">
+          <input type="checkbox">
+            <%= image_tag("python_150.png", :alt => "python") %>
+        <label class="checkbox">
+          <input type="checkbox">
+            <%= image_tag("java_150.png", :alt => "java") %>
+        <label class="checkbox">
+          <input type="checkbox">
+            <%= image_tag("ruby_150.png", :alt => "ruby") %>
+        <label class="checkbox">
+          <input type="checkbox">
+            <%= image_tag("r_150.png", :alt => "R") %>
+        <label class="checkbox">
+            <input type="checkbox">
+            <%= image_tag("nodejs_150.png", :alt => "nodejs") %>
+        </label>
+      </div>
+    </div>
+
+  <% end %>
+</div>
