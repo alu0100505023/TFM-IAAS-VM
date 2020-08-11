@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
 
+  before_action :require_login
+
   def index
     @posts=Post.all.order("created_at DESC")
   end
@@ -7,6 +9,7 @@ class PostsController < ApplicationController
   def new
     @post=Post.new
   end
+
 
   def create
     @post=Post.new(post_params)

@@ -1,0 +1,40 @@
+<%= form_for :session, url: session_path do |form| %>
+
+  <div class="hero-body"
+    <div class="container has-text-centered">
+
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+              <h3 class="title has-text-black" style="text-align:center">Login</h3>
+              <hr class="login-hr">
+                <div class="control has-icons-left has-icons-right">
+                  <div class="field">
+                    <%= form.text_field :email, class: 'input', type: 'email', placeholder: "Correo Electronico" %>
+                  </div>
+                  <span class="icon is-left">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                  <span class="icon is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </div>  
+                <div class="password-field">
+                  <%= form.label :password %>
+                  <%= form.password_field :password %>
+                </div>
+
+                <div class="submit-field">
+                  <%= form.submit %>
+                </div>
+
+                <div class="other-links">
+                  <% if Clearance.configuration.allow_sign_up? %>
+                    <%= link_to t(".sign_up"), sign_up_path %>
+                  <% end %>
+                  <%= link_to t(".forgot_password"), new_password_path %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% end %>
