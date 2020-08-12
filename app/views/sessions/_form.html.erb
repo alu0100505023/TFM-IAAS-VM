@@ -1,6 +1,6 @@
 <%= form_for :session, url: session_path do |form| %>
 
-  <div class="hero-body"
+  <div class="hero-body">
     <div class="container has-text-centered">
 
         <div class="column is-4 is-offset-4">
@@ -17,24 +17,29 @@
                   <span class="icon is-right">
                     <i class="fas fa-check"></i>
                   </span>
-                </div>  
+                </div>
                 <div class="password-field">
-                  <%= form.label :password %>
-                  <%= form.password_field :password %>
+                  <p class="control has-icons-left">
+                   <%= form.password_field :password, class: 'input', placeholder: "Contraseña" %>
+                   <span class="icon is-small is-left">
+                     <i class="fas fa-lock"></i>
+                   </span>
+                 </p>
                 </div>
-
-                <div class="submit-field">
-                  <%= form.submit %>
+                  <div class="column is-4 is-offset-4" style="padding-top:0.7cm">
+                    <div class="submit-field" style="text-align:center">
+                      <%= form.submit class: 'button is-link is-rounded', value: 'Iniciar sesión'%>
+                    </div>
+                  </div>
                 </div>
-
-                <div class="other-links">
+                <div class="other-links" style="text-align:right">
                   <% if Clearance.configuration.allow_sign_up? %>
-                    <%= link_to t(".sign_up"), sign_up_path %>
+                    <%= link_to t(".Registrarse"), sign_up_path %>
                   <% end %>
-                  <%= link_to t(".forgot_password"), new_password_path %>
+                <!--  <%= link_to t(".forgot_password"), new_password_path %> -->
                 </div>
-            </div>
-        </div>
+
+              </div>
     </div>
 </div>
 <% end %>
