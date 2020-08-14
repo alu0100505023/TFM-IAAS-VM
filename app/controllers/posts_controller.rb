@@ -3,7 +3,8 @@ class PostsController < ApplicationController
   before_action :require_login
 
   def index
-    @posts=Post.all.order("created_at DESC")
+    #@posts=Post.all.order("created_at DESC")
+    @posts=Post.all.where(email: [current_user.email])
   end
 
   def new
@@ -12,7 +13,11 @@ class PostsController < ApplicationController
 
 
   def create
-    @post=Post.new(post_params)
+
+    parametros=post_params
+    parametros[:email]=current_user.email
+
+    @post=Post.new(parametros)
 
     if @post.save
       redirect_to @post
@@ -22,12 +27,20 @@ class PostsController < ApplicationController
   end
 
   def show
-    @post= Post.find(params[:id])
+    #@post= Post.find(params[:id])
+    url=Post.find(params[:id])
+
+    if url[:email]==current_user.email then
+      puts "entre aqui"
+      @post=url
+    else
+      redirect_to '/posts/index'
+    end
   end
 
   private
 
   def post_params
-      params.require(:post).permit(:title, :content)
+      params.require(:post).permit(:title, :content, :email )
   end
 end
