@@ -1,6 +1,8 @@
-<h1 class="title">Nueva maquina virtual</h1>
 
-<div class="tabs is-boxed">
+<div class="container">
+<h1 class="title">Nueva proyecto</h1>
+
+<div class="tabs is-boxed" style="margin-bottom: 0rem">
   <ul>
     <li class="is-active" id="tab-config" onclick="activeTab(1)">
       <a>
@@ -10,20 +12,20 @@
     </li>
     <li id="tab-hardware" onclick="activeTab(2)">
       <a>
-        <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+        <span class="icon is-small"><i class="fas fa-server" aria-hidden="true"></i></span>
         <span>Hardware</span>
       </a>
     </li>
     <li id="tab-software" onclick="activeTab(3)">
       <a>
-        <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
+        <span class="icon is-small"><i class="fas fa-code" aria-hidden="true"></i></span>
         <span>Software</span>
       </a>
     </li>
     <li>
       <a>
         <span class="icon is-small"><i class="fas fa-file-text-o" aria-hidden="true"></i></span>
-        <span>Documents</span>
+        <span>Crear proyecto</span>
       </a>
     </li>
   </ul>
@@ -46,29 +48,29 @@
       break;
 
       case 2:
-      document.getElementById("tab-config").classList.remove('is-active');
-      document.getElementById("tab-software").classList.remove('is-active');
-      document.getElementById("tab-hardware").classList.toggle('is-active');
+        document.getElementById("tab-config").classList.remove('is-active');
+        document.getElementById("tab-software").classList.remove('is-active');
+        document.getElementById("tab-hardware").classList.toggle('is-active');
 
-      document.getElementById("section-config").classList.add('is-hidden');
-      document.getElementById("section-hardware").classList.remove('is-hidden');
-      document.getElementById("section-software").classList.add('is-hidden');
-      break;
+        document.getElementById("section-config").classList.add('is-hidden');
+        document.getElementById("section-hardware").classList.remove('is-hidden');
+        document.getElementById("section-software").classList.add('is-hidden');
+        break;
 
       case 3:
-      document.getElementById("tab-config").classList.remove('is-active');
-      document.getElementById("tab-hardware").classList.remove('is-active');
-      document.getElementById("tab-software").classList.toggle('is-active');
+        document.getElementById("tab-config").classList.remove('is-active');
+        document.getElementById("tab-hardware").classList.remove('is-active');
+        document.getElementById("tab-software").classList.toggle('is-active');
 
-      document.getElementById("section-config").classList.add('is-hidden');
-      document.getElementById("section-hardware").classList.add('is-hidden');
-      document.getElementById("section-software").classList.remove('is-hidden');
+        document.getElementById("section-config").classList.add('is-hidden');
+        document.getElementById("section-hardware").classList.add('is-hidden');
+        document.getElementById("section-software").classList.remove('is-hidden');
 
       break;
 
       case 4:
-      document.getElementById("tab-config").classList.remove('is-active');
-      document.getElementById("tab-hardware").classList.toggle('is-active');
+        document.getElementById("tab-config").classList.remove('is-active');
+        document.getElementById("tab-hardware").classList.toggle('is-active');
       break;
     }
   }
@@ -78,22 +80,24 @@
 
 
 
-<div class="section" id="section-config">
-  <%= simple_form_for @post do |f| %>
-    <div class="field">
-      <div class="control">
-        <%= f.input :title, input_html: { class: 'input' }, wrapper: false, label_html: { class: 'label' } %>
+<div class="section" id="section-config"  style="border-left: 1px solid #dbdbdb;">
+    <%= simple_form_for @post do |f| %>
+      <div class="field">
+        <div class="control">
+          <%= f.input :title, input_html: { class: 'input' }, wrapper: false, label_html: { class: 'label' } %>
+        </div>
       </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <%= f.input :content, input_html: { class: 'textarea' }, wrapper: false, label_html: { class: 'label' } %>
+      <div class="field">
+        <div class="control">
+          <%= f.input :content, input_html: { class: 'textarea' }, wrapper: false, label_html: { class: 'label' } %>
+        </div>
       </div>
-    </div>
-    <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
+      <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
+
   </div>
 
-  <div class="section is-hidden" id="section-hardware">
+
+  <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb">
       <table class="table">
         <tr>
           <td>
@@ -112,10 +116,11 @@
           <td style="vertical-align: middle;">
             <label class="label" style="float:left;vertical-align: middle;">Memoria RAM</label>
           </td>
+
           <td style="vertical-align: middle;">
             <input class="input is-small" style="float:left;" type="text" placeholder="Gigabytes">
-
           </td>
+
           <td style="vertical-align: middle;">
             <div class="control" style="vertical-align: middle;">
               <label class="label" ">Numero de equipos</label>
@@ -136,12 +141,11 @@
                 </select>
               </div>
           </td>
-            </div>
         </tr>
       </table>
     </div>
 
-    <div class="section is-hidden" id="section-software">
+    <div class="section is-hidden" id="section-software" style="border-left: 1px solid #dbdbdb">
       <h2 style="padding-bottom:0.2cm;"><strong>Aplicaciones pre-instaladas</strong></h2>
       <div class="box" style="display: inline-block">
         <label class="checkbox">
@@ -164,4 +168,6 @@
     </div>
 
   <% end %>
+</div>
+
 </div>

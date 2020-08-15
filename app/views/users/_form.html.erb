@@ -26,13 +26,13 @@
               </div>
                 <div class="column is-4 is-offset-4" style="padding-top:0.7cm">
                   <div class="submit-field" style="text-align:center">
-                    <%= form.submit class: 'button is-link is-rounded', value: 'Registrarse' %>
+                    <%= form.submit class: 'button is-link', value: 'Registrarse' %>
                   </div>
                 </div>
               </div>
               <div class="other-links" style="text-align:right">
                 <% if Clearance.configuration.allow_sign_up? %>
-                  <%= link_to t(".Login"), sign_in_path %>
+                  <%= link_to t(".Iniciar sesión"), sign_in_path %>
                 <% end %>
               <!--  <%= link_to t(".forgot_password"), new_password_path %> -->
               </div>
