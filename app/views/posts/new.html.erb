@@ -1,5 +1,84 @@
 <h1 class="title">Nueva maquina virtual</h1>
-<div class="section">
+
+<div class="tabs is-boxed">
+  <ul>
+    <li class="is-active" id="tab-config" onclick="activeTab(1)">
+      <a>
+        <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+        <span>Configuración Inicial</span>
+      </a>
+    </li>
+    <li id="tab-hardware" onclick="activeTab(2)">
+      <a>
+        <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+        <span>Hardware</span>
+      </a>
+    </li>
+    <li id="tab-software" onclick="activeTab(3)">
+      <a>
+        <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
+        <span>Software</span>
+      </a>
+    </li>
+    <li>
+      <a>
+        <span class="icon is-small"><i class="fas fa-file-text-o" aria-hidden="true"></i></span>
+        <span>Documents</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+
+  function activeTab(tab){
+
+    switch (tab) {
+      case 1:
+        document.getElementById("tab-hardware").classList.remove('is-active');
+        document.getElementById("tab-software").classList.remove('is-active');
+        document.getElementById("tab-config").classList.toggle('is-active');
+
+        document.getElementById("section-config").classList.remove('is-hidden');
+        document.getElementById("section-hardware").classList.add('is-hidden');
+        document.getElementById("section-software").classList.add('is-hidden');
+
+      break;
+
+      case 2:
+      document.getElementById("tab-config").classList.remove('is-active');
+      document.getElementById("tab-software").classList.remove('is-active');
+      document.getElementById("tab-hardware").classList.toggle('is-active');
+
+      document.getElementById("section-config").classList.add('is-hidden');
+      document.getElementById("section-hardware").classList.remove('is-hidden');
+      document.getElementById("section-software").classList.add('is-hidden');
+      break;
+
+      case 3:
+      document.getElementById("tab-config").classList.remove('is-active');
+      document.getElementById("tab-hardware").classList.remove('is-active');
+      document.getElementById("tab-software").classList.toggle('is-active');
+
+      document.getElementById("section-config").classList.add('is-hidden');
+      document.getElementById("section-hardware").classList.add('is-hidden');
+      document.getElementById("section-software").classList.remove('is-hidden');
+
+      break;
+
+      case 4:
+      document.getElementById("tab-config").classList.remove('is-active');
+      document.getElementById("tab-hardware").classList.toggle('is-active');
+      break;
+    }
+  }
+
+
+</script>
+
+
+
+<div class="section" id="section-config">
   <%= simple_form_for @post do |f| %>
     <div class="field">
       <div class="control">
@@ -11,9 +90,10 @@
         <%= f.input :content, input_html: { class: 'textarea' }, wrapper: false, label_html: { class: 'label' } %>
       </div>
     </div>
-    <%= f.button :submit, 'New post', class: "button is-primary" %>
+    <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
+  </div>
 
-    <div class="section">
+  <div class="section is-hidden" id="section-hardware">
       <table class="table">
         <tr>
           <td>
@@ -33,7 +113,8 @@
             <label class="label" style="float:left;vertical-align: middle;">Memoria RAM</label>
           </td>
           <td style="vertical-align: middle;">
-            <input class="input" style="float:left;" type="text" placeholder="Gigabytes">
+            <input class="input is-small" style="float:left;" type="text" placeholder="Gigabytes">
+
           </td>
           <td style="vertical-align: middle;">
             <div class="control" style="vertical-align: middle;">
@@ -60,7 +141,7 @@
       </table>
     </div>
 
-    <div class="section">
+    <div class="section is-hidden" id="section-software">
       <h2 style="padding-bottom:0.2cm;"><strong>Aplicaciones pre-instaladas</strong></h2>
       <div class="box" style="display: inline-block">
         <label class="checkbox">

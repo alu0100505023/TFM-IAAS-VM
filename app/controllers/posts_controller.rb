@@ -34,7 +34,7 @@ class PostsController < ApplicationController
       puts "entre aqui"
       @post=url
     else
-      redirect_to '/posts/index'
+      render 'index'
     end
   end
 
