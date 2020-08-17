@@ -11,12 +11,12 @@ class PostsController < ApplicationController
     @post=Post.new
   end
 
+
   def createVM
-
     @vm=Services::Ansible.new()
-    @response=@vm.basiVM()
+    @response=@vm.basicVM()
 
-    puts @response
+    puts "Respuesta del controlador: "+@response
     render json: @response
   end
 

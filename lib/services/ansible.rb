@@ -4,8 +4,13 @@ module Services
 
     def basicVM
       #@vm=`/etc/ansible ansible-playbook vm-basic.yml`
-      @vm=`/etc/ansible ansible -m ping all`
+      begin
+        @vm=`/etc/ansible ansible -m ping all`
+      rescue
+        @vm="Server not found"
+      end
     end
+
 
   end
 

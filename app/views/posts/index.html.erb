@@ -31,9 +31,13 @@
     $.ajax({
         url: '/createVM',
         type: 'GET',
-        data:{},
         success: function(data){
-          document.getElementById('output').innerHTML=data;
+          console.log(data);
+          document.getElementById("output").innerHTML=data;
+        },
+        error: function(data){
+          console.log(data.responseText);
+          document.getElementById("output").innerHTML=data.responseText;
         }
     });
   }
@@ -41,13 +45,18 @@
 
 <section>
   <div>
-    <button class="button" id="btn_ansible" onclick=callAnsible()>
-
-    <div style="float:right">
-      <pre class="pre" id="output">hey baby que paso<pre>
-    </div>
+    <button class="button" id="btn_ansible" onclick=callAnsible()>Ping a Ansible</button>
   </div>
 </section>
+
+<section>
+  <div>
+    <pre class="pre" id="output">output<pre>
+  </div>
+  </section>
+
+
+
 
 <section class="section">
   <div class="container">

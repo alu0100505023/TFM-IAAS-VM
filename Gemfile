@@ -26,6 +26,7 @@ gem 'simple_form','~> 5.0.2'
 gem "font-awesome-rails"
 gem 'clearance', '~> 1.15.1'
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
