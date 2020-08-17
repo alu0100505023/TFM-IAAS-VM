@@ -26,6 +26,29 @@
   </div>
 </section>
 
+<script>
+  function callAnsible(){
+    $.ajax({
+        url: '/createVM',
+        type: 'GET',
+        data:{},
+        success: function(data){
+          document.getElementById('output').innerHTML=data;
+        }
+    });
+  }
+</script>
+
+<section>
+  <div>
+    <button class="button" id="btn_ansible" onclick=callAnsible()>
+
+    <div style="float:right">
+      <pre class="pre" id="output">hey baby que paso<pre>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <% @posts.each do |post| %>

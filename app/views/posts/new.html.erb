@@ -1,12 +1,12 @@
 
 <div class="container">
-<h1 class="title">Nueva proyecto</h1>
+<h1 class="title">Nuevo proyecto</h1>
 
 <div class="tabs is-boxed" style="margin-bottom: 0rem">
   <ul>
     <li class="is-active" id="tab-config" onclick="activeTab(1)">
       <a>
-        <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+        <span class="icon is-small"><i class="fas fa-edit" aria-hidden="true"></i></span>
         <span>Configuración Inicial</span>
       </a>
     </li>
@@ -84,37 +84,60 @@
     <%= simple_form_for @post do |f| %>
       <div class="field">
         <div class="control">
-          <%= f.input :title, input_html: { class: 'input' }, wrapper: false, label_html: { class: 'label' } %>
+          <%= f.input :title, input_html: { class: 'input' ,required: true }, wrapper: false, label_html: { class: 'label' } %>
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <%= f.input :content, input_html: { class: 'textarea' }, wrapper: false, label_html: { class: 'label' } %>
+          <%= f.input :content, input_html: { class: 'textarea', required: true }, wrapper: false, label_html: { class: 'label' } %>
         </div>
       </div>
       <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
 
+      <table class="table">
+        <tr>
+          <td style="vertical-align: middle;">
+            <label class="label is-small" style="float:left;vertical-align: middle;">Usuario</label>
+          </td>
+
+          <td style="vertical-align: middle;">
+            <input class="input is-small" style="float:left;" type="text" placeholder="Nombre del usuario">
+          </td>
+
+          <td style="vertical-align: middle;">
+            <label class="label is-small" style="float:left;vertical-align: middle;">Contraseña</label>
+          </td>
+
+          <td style="vertical-align: middle;">
+            <input class="input is-small" style="float:left;" type="password" placeholder="">
+          </td>
+        </tr>
+      </table>
+      <div style="float:right">
+        <button id="btn_hardware_next" class="button" onclick="changeTab()" style="background:#5c068c;color:white">Siguiente</button>
+      </div>
   </div>
 
 
-  <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb">
+  <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb; margin-bottom:4cm">
       <table class="table">
         <tr>
           <td>
-            <h2 style="padding-bottom:0.2cm;vertical-align: middle;"><strong>Sistema Operativo</strong></h2>
+            <label class="label is-small" style="float:left;vertical-align: middle;">Sistema Operativo</label>
           </td>
           <td>
             <div class="control">
-              <div class="select">
+              <div class="select is-small">
                 <select>
-                  <option>Centos 6</option>
-                  <option>Ubuntu</option>
+                  <option>centos-7</option>
+                  <option>debian-9</option>
+                  <option>ubuntu-1804</option>
                 </select>
               </div>
             </div>
           </td>
           <td style="vertical-align: middle;">
-            <label class="label" style="float:left;vertical-align: middle;">Memoria RAM</label>
+            <label class="label is-small" style="float:left;vertical-align: middle;">Almacenamiento</label>
           </td>
 
           <td style="vertical-align: middle;">
@@ -122,11 +145,20 @@
           </td>
 
           <td style="vertical-align: middle;">
+            <label class="label is-small" style="float:left;vertical-align: middle;">Memoria RAM</label>
+          </td>
+
+          <td style="vertical-align: middle;">
+            <input class="input is-small" style="float:left;" type="text" placeholder="Bytes" value="1024">
+          </td>
+
+
+          <td style="vertical-align: middle;">
             <div class="control" style="vertical-align: middle;">
-              <label class="label" ">Numero de equipos</label>
+              <label class="label is-small" ">Numero de equipos</label>
           </td>
           <td>
-              <div class="select">
+              <div class="select is-small">
                 <select>
                   <option>1</option>
                   <option>2</option>
@@ -142,10 +174,57 @@
               </div>
           </td>
         </tr>
+        <tr>
+            <td style="vertical-align: middle;">
+              <label class="label is-small" style="float:left;vertical-align: middle;">Espacio de trabajo</label>
+            </td>
+
+            <td style="vertical-align: middle;">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Cuota">
+            </td>
+
+            <td style="vertical-align: middle;">
+              <label class="label is-small" style="float:left;vertical-align: middle;">Cluster</label>
+            </td>
+
+            <td style="vertical-align: middle;">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Nombre del cluster">
+            </td>
+        </tr>
+
+        <tr>
+            <td style="vertical-align: middle;">
+              <label class="label is-small" style="float:left;vertical-align: middle;">Nombre de usuario</label>
+            </td>
+
+            <td style="vertical-align: middle;">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Usuario del sistema" value="Usuario">
+            </td>
+
+            <td style="vertical-align: middle;">
+              <label class="label is-small" style="float:left;vertical-align: middle;">Contraseña de root</label>
+            </td>
+
+            <td style="vertical-align: middle;">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Contraseña" value="Usuario">
+            </td>
+
+            <td style="vertical-align: middle;">
+              <label class="label is-small" style="float:left;vertical-align: middle;">Numero de procesadores</label>
+            </td>
+
+            <td style="vertical-align: middle;">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Procesadores" value="1">
+            </td>
+        </tr>
+
       </table>
+      <div style="float:right">
+        <button id="btn_hardware_next" class="button" onclick="changeTab()" style="background:#5c068c;color:white">Siguiente</button>
+      </div>
     </div>
 
-    <div class="section is-hidden" id="section-software" style="border-left: 1px solid #dbdbdb">
+    <div class="section is-hidden" id="section-software" style="border-left: 1px solid #dbdbdb; margin-bottom:4cm">
       <h2 style="padding-bottom:0.2cm;"><strong>Aplicaciones pre-instaladas</strong></h2>
       <div class="box" style="display: inline-block">
         <label class="checkbox">
