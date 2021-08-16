@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container" style = "margin-top:50px">
 <h1 class="title">Nuevo proyecto</h1>
 
 <div class="tabs is-boxed" style="margin-bottom: 0rem">
@@ -77,11 +77,15 @@
 
 
 </script>
+  <style>
+      .section {
+          border-left: 1px solid #dbdbdb;border-bottom: 1px solid #dbdbdb;
+          border-right: 1px solid #dbdbdb;
+      }
+  </style>
 
-
-
-<div class="section" id="section-config"  style="border-left: 1px solid #dbdbdb;">
-    <%= simple_form_for @post do |f| %>
+  <%= simple_form_for @post do |f| %>
+    <div class="section" id="section-config"  style="">
       <div class="field">
         <div class="control">
           <%= f.input :title, input_html: { class: 'input' ,required: true }, wrapper: false, label_html: { class: 'label' } %>
@@ -92,7 +96,7 @@
           <%= f.input :content, input_html: { class: 'textarea', required: true }, wrapper: false, label_html: { class: 'label' } %>
         </div>
       </div>
-      <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
+
 
       <table class="table">
         <tr>
@@ -116,10 +120,10 @@
       <div style="float:right">
         <button id="btn_hardware_next" class="button" onclick="changeTab()" style="background:#5c068c;color:white">Siguiente</button>
       </div>
-  </div>
+    </div>
 
 
-  <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb; margin-bottom:4cm">
+    <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb; margin-bottom:4cm">
       <table class="table">
         <tr>
           <td>
@@ -130,6 +134,7 @@
               <div class="select is-small">
                 <select>
                   <option>centos-7</option>
+                  <option>centos-8</option>
                   <option>debian-9</option>
                   <option>ubuntu-1804</option>
                 </select>
@@ -245,8 +250,10 @@
         </label>
       </div>
     </div>
-
+    <div id="submit-container" style = "margin-top:10px">
+      <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>
+    </div>
   <% end %>
-</div>
+  </div>
 
 </div>

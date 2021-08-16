@@ -11,32 +11,10 @@
 </head>
 
 <body>
-  <header style="background:#5c068c">
-    <%= image_tag("ull_logo.png", :alt => "ULL") %>
-  </header>
-  <section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="header" style="float:right">
-        <% if signed_in? -%>
-          <label class="label" style="float:left;padding-right:0.2cm"><%=current_user.email%></label>
-          <%= link_to t(".Desconectarse"), sign_out_path, method: :delete, class: 'button is-small' %>
-        <% else -%>
-          <%= link_to t(".Iniciar sesión"), sign_in_path, class: 'button is-small' %>
-        <% end -%>
-      </div>
-    </div>
-  </div>
-  </section>
+  <%= render "layouts/header" %>
 
   <%= yield %>
 
+  <%= render "layouts/footer" %>
 </body>
-  <footer class="footer" style="margin-top:1cm; padding-bottom:2rem; padding-top:2rem">
-    <div class="content has-text-right">
-      <p>
-        Master en Ciberseguridad e Inteligencia de datos
-      </p>
-    </div>
-  </footer>
 </html>

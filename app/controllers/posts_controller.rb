@@ -2,9 +2,12 @@ class PostsController < ApplicationController
 
   before_action :require_login
 
+
   def index
     #@posts=Post.all.order("created_at DESC")
     @posts=Post.all.where(email: [current_user.email])
+    @vm = Services::Ansible.new()
+    @vm.format_variable_yml
   end
 
   def new
@@ -14,7 +17,7 @@ class PostsController < ApplicationController
 
   def createVM
     @vm=Services::Ansible.new()
-    @response=@vm.basicVM()
+    @response = @vm.basicVM()
 
     puts "Respuesta del controlador: "+@response
     render json: @response
