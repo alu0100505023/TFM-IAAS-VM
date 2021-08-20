@@ -25,10 +25,11 @@ class PostsController < ApplicationController
 
   def create
 
-    parametros=post_params
-    parametros[:email]=current_user.email
+    params = post_params
+    params[:email] = current_user.email
 
-    @post=Post.new(parametros)
+    Rails.logger.info params[:pool]
+    @post=Post.new(params)
 
     if @post.save
       redirect_to @post
@@ -42,7 +43,6 @@ class PostsController < ApplicationController
     url=Post.find(params[:id])
 
     if url[:email]==current_user.email then
-      puts "entre aqui"
       @post=url
     else
       render 'index'

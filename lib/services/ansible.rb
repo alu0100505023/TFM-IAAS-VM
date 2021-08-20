@@ -1,4 +1,5 @@
 require 'yaml'
+require 'net/ping'
 
 module Services
 
@@ -51,6 +52,12 @@ module Services
       #some stuff to return ip availables
       #
       return ["192.168.151.21","192.168.151.22","192.168.151.23"]
+    end
+    require 'net/ping'
+
+    def up?(host)
+      check = Net::Ping::External.new(host)
+      check.ping?
     end
 
     #disks:

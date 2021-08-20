@@ -22,12 +22,6 @@
         <span>Software</span>
       </a>
     </li>
-    <li>
-      <a>
-        <span class="icon is-small"><i class="fas fa-file-text-o" aria-hidden="true"></i></span>
-        <span>Crear proyecto</span>
-      </a>
-    </li>
   </ul>
 </div>
 
@@ -88,12 +82,12 @@
     <div class="section" id="section-config"  style="">
       <div class="field">
         <div class="control">
-          <%= f.input :title, input_html: { class: 'input' ,required: true }, wrapper: false, label_html: { class: 'label' } %>
+          <%= f.input :title, :label => "Titulo del proyecto", input_html: { class: 'input' ,required: true }, wrapper: false, label_html: { class: 'label' } %>
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <%= f.input :content, input_html: { class: 'textarea', required: true }, wrapper: false, label_html: { class: 'label' } %>
+          <%= f.input :content, input_html: { class: 'textarea', required: true }, wrapper: false, label_html: { class: 'label' }, :label => "Descricpión" %>
         </div>
       </div>
 
@@ -117,8 +111,8 @@
           </td>
         </tr>
       </table>
-      <div style="float:right">
-        <button id="btn_hardware_next" class="button" onclick="changeTab()" style="background:#5c068c;color:white">Siguiente</button>
+      <div style="float:right" onclick="activeTab(2)">
+        <button id="btn_hardware_next" class="button"  style="background:#5c068c;color:white">Siguiente</button>
       </div>
     </div>
 
@@ -193,7 +187,7 @@
             </td>
 
             <td style="vertical-align: middle;">
-              <input class="input is-small" style="float:left;" type="text" placeholder="Nombre del cluster">
+              <input class="input is-small" style="float:left;" type="text" placeholder="Nombre del cluster" name = pool[cluster]>
             </td>
         </tr>
 
@@ -224,8 +218,8 @@
         </tr>
 
       </table>
-      <div style="float:right">
-        <button id="btn_hardware_next" class="button" onclick="changeTab()" style="background:#5c068c;color:white">Siguiente</button>
+      <div style="float:right" onclick="activeTab(3)">
+        <button id="btn_hardware_next" class="button"  style="background:#5c068c;color:white">Siguiente</button>
       </div>
     </div>
 
