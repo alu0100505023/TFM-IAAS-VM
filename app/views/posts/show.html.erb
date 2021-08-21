@@ -1,10 +1,18 @@
-<section class="section">
-  <div class="container">
-    <h1 class="title">
-      <%= @post.title %>
-      </h1>
-    <div class="content">
-      <%= @post.content %>
-    </div>
-  </div>
-</section>
+<div id="show-container" style="margin-left:40px; margin-bottom:20px">
+    <section class="section">
+      <div class="container" style = "float:left">
+        <h1 class="title">
+          <%= @post.title %>
+          </h1>
+        <div class="content">
+          <%= @post.content %>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <%= render partial: "pool", locals: {pool: @pool, machine: @machines.first} %>
+    </section>
+    <section class="section">
+      <%= render partial: "machine", locals: {machines: @machines} %>
+    </section>
+</div>

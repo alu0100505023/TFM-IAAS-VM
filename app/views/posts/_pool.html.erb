@@ -1,0 +1,17 @@
+<div class="content" style ="margin-top:10px; width:25%">
+    <h2>Info</h1>
+    <div class = "columns is-desktop is-half-desktop">
+        <div class = "column">
+            <p>Numero de maquinas: <%= pool.slaves + pool.masters %></p>
+            <p>Cluster: <%= pool.cluster %></p>
+            <p>Almacenamiento: <%= pool.storage_domain %></p>
+            <p>Tipo de proyecto: <%= machine.machine_type %></p>
+        </div>
+        <div class = "column">
+            <p>Plantilla: <%= pool.template %></p>
+            <p>Numero de CPUs: <%= machine.cpu %></p>
+            <p>Memoria RAM: <%= machine.ram %></p>
+            <p>Disco: <%= machine.disk %>GB</p>
+        </div>
+    </div>
+</div>

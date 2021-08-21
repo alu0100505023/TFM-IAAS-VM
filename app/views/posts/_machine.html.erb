@@ -1,0 +1,21 @@
+
+<div id="machine-container" style="margin-top:20px; margin-left:10px">
+    <% @machines.each do |machine| %>
+        <div class = "box" style = "float:left; margin-right:10px">
+            <article class = "media">
+                <% if machine.machine_type == 'simple' %>
+                    <div class="media-left">
+                     <span class="icon is-medium has-text-info">
+                        <i class="fas fa-desktop fa-2x"></i>
+                     </span>
+                     </div>
+                <% end %>
+                <div class = "media-content">
+                    <div class="content">
+                        <p> <%= machine.ip %> </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    <% end %>
+ </div>

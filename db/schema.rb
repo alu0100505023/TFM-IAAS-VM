@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_14_092130) do
+ActiveRecord::Schema.define(version: 2020_08_14_092133) do
+
+  create_table "machines", force: :cascade do |t|
+    t.string "ip"
+    t.string "external_ip"
+    t.integer "cpu"
+    t.integer "ram"
+    t.integer "disk"
+    t.text "username"
+    t.text "password"
+    t.string "machine_type"
+    t.integer "pool_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["pool_id"], name: "index_machines_on_pool_id"
+  end
+
+  create_table "pools", force: :cascade do |t|
+    t.string "cluster"
+    t.string "storage_domain"
+    t.string "template"
+    t.string "instance_type"
+    t.integer "masters"
+    t.integer "slaves"
+    t.integer "post_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_pools_on_post_id"
+  end
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
@@ -31,4 +59,6 @@ ActiveRecord::Schema.define(version: 2020_08_14_092130) do
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
+  add_foreign_key "machines", "pools"
+  add_foreign_key "pools", "posts"
 end
