@@ -1,0 +1,4 @@
+ansible:
+  default-path: "/etc/ansible/"
+  templates-path: "/etc/ansible/templates/"
+  users-path: "/etc/ansible/users/"
