@@ -42,6 +42,8 @@ module Services
     def create_pool_directory(user, pool)
       unless File.exist?("#{ANSIBLE_USERS}#{user}/#{pool.id}")
         `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}`
+        `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/external-ip`
+        `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/cluster-hosts`
         `cp #{ANSIBLE_TEMPLATES}login-vars.yml #{ANSIBLE_USERS}#{user}/#{pool.id}`
         `cp #{ANSIBLE_TEMPLATES}create-vm.yml #{ANSIBLE_USERS}#{user}/#{pool.id} `
       end
@@ -61,11 +63,21 @@ module Services
       slaves = pool.slaves
       storage_domain = pool.storage_domain
       pool_type = pool.pool_type
+      template_machine = Machine.find_by(pool: pool)
 
       ips_master = get_ip(master)
       ips_slaves = get_ip(slaves)
 
       vm = {"wn" => []}
+
+      vm["storage-domain"] = pool.storage_domain
+      vm["os"] = pool.template
+      vm["vm_username"] = template_machine.username
+      vm["vm_password"] = template_machine.password
+      vm["disk"] = template_machine.disk
+      vm["ram"] = template_machine.ram
+      vm["cluster"] = pool.cluster
+      vm["cpu"] = template_machine.cpu
 
       if pool_type == "cluster"
         machines.each_with_index do |machine, index|
@@ -91,6 +103,40 @@ module Services
       Rails.logger.info vm.to_yaml
     end
 
+    def hosts_inventory(user, pool, machines)
+      masters = []
+      masters_slaves = []
+      slaves = []
+
+      machines.each do |machine|
+        masters_slaves.push(machine.ip)
+        if machine.machine_type == "master"
+          masters.push(machine.ip)
+        end
+
+        if machine.machine_type == "slave"
+          slaves.push(machine.ip)
+        end
+      end
+
+      open("#{ANSIBLE_USERS}#{user}/#{pool.id}/cluster-hosts", 'a') { |f|
+        f << "[masters-slaves]\n"
+        masters_slaves.each do |machine|
+          f << "#{machine}\n"
+        end
+        f << "\n"
+        f << "[masters]\n"
+        masters.each do |machine|
+          f << "#{machine}\n"
+        end
+        f << "\n"
+        f << "[slaves]\n"
+        slaves.each do |machine|
+          f << "#{machine}\n"
+        end
+      }
+    end
+
     def get_ip(machines)
       #some stuff to return ip availables
       #
@@ -103,6 +149,13 @@ module Services
       check.ping?
     end
 
+    def get_external_ip(machines)
+      machines.each do |machine|
+        if machine.external_ip == nil
+            file =  machine.ip
+        end
+      end
+    end
     #disks:
     #  - name: data
     #    id: myvm_disk_prueba*

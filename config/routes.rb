@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :posts
   root "posts#index"
   get "createVM" => "posts#createVM"
-
+  get "new_cluster" => "posts#new_cluster"
 =begin
   constraints Clearance::Constraints::SignedOut.new do
     root to: 'users#new'

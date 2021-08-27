@@ -1,5 +1,5 @@
 <div class="container" style = "margin-top:50px">
-<h1 class="title">Nuevo proyecto</h1>
+<h1 class="title">Nuevo Cluster</h1>
 
 <div class="tabs is-boxed" style="margin-bottom: 0rem">
   <ul>
@@ -15,12 +15,6 @@
         <span>Hardware</span>
       </a>
     </li>
-    <li id="tab-software" onclick="activeTab(3)">
-      <a>
-        <span class="icon is-small"><i class="fas fa-code" aria-hidden="true"></i></span>
-        <span>Software</span>
-      </a>
-    </li>
   </ul>
 </div>
 
@@ -31,33 +25,27 @@
     switch (tab) {
       case 1:
         document.getElementById("tab-hardware").classList.remove('is-active');
-        document.getElementById("tab-software").classList.remove('is-active');
         document.getElementById("tab-config").classList.toggle('is-active');
 
         document.getElementById("section-config").classList.remove('is-hidden');
         document.getElementById("section-hardware").classList.add('is-hidden');
-        document.getElementById("section-software").classList.add('is-hidden');
 
       break;
 
       case 2:
         document.getElementById("tab-config").classList.remove('is-active');
-        document.getElementById("tab-software").classList.remove('is-active');
         document.getElementById("tab-hardware").classList.toggle('is-active');
 
         document.getElementById("section-config").classList.add('is-hidden');
         document.getElementById("section-hardware").classList.remove('is-hidden');
-        document.getElementById("section-software").classList.add('is-hidden');
         break;
 
       case 3:
         document.getElementById("tab-config").classList.remove('is-active');
         document.getElementById("tab-hardware").classList.remove('is-active');
-        document.getElementById("tab-software").classList.toggle('is-active');
 
         document.getElementById("section-config").classList.add('is-hidden');
         document.getElementById("section-hardware").classList.add('is-hidden');
-        document.getElementById("section-software").classList.remove('is-hidden');
 
       break;
 
@@ -117,6 +105,9 @@
 
 
     <div class="section is-hidden" id="section-hardware" style="border-left: 1px solid #dbdbdb;">
+
+      <div id ="spark-ico" style = "text-align:right; margin-bottom:10px"><%= image_tag("spark.png", :alt => "spark") %>
+      </div>
       <table class="table">
         <tr>
           <td>
@@ -128,8 +119,6 @@
                 <select name = pool[template]>
                   <option>centos-7</option>
                   <option>centos-8</option>
-                  <option>debian-9</option>
-                  <option>ubuntu-1804</option>
                 </select>
               </div>
             </div>
@@ -153,7 +142,7 @@
 
           <td style="vertical-align: middle;">
             <div class="control" style="vertical-align: middle;">
-              <label class="label is-small" ">Numero de equipos</label>
+              <label class="label is-small" ">Número de workers</label>
           </td>
           <td>
               <div class="select is-small">
@@ -217,31 +206,6 @@
         </tr>
 
       </table>
-      <div style="float:right" onclick="activeTab(3)">
-        <button id="btn_hardware_next" class="button"  style="background:#5c068c;color:white">Siguiente</button>
-      </div>
-    </div>
-
-    <div class="section is-hidden" id="section-software" style="border-left: 1px solid #dbdbdb;">
-      <h2 style="padding-bottom:0.2cm;"><strong>Aplicaciones pre-instaladas</strong></h2>
-      <div class="box" style="display: inline-block">
-        <label class="checkbox">
-          <input type="checkbox">
-            <%= image_tag("python_150.png", :alt => "python") %>
-        <label class="checkbox">
-          <input type="checkbox">
-            <%= image_tag("java_150.png", :alt => "java") %>
-        <label class="checkbox">
-          <input type="checkbox">
-            <%= image_tag("ruby_150.png", :alt => "ruby") %>
-        <label class="checkbox">
-          <input type="checkbox">
-            <%= image_tag("r_150.png", :alt => "R") %>
-        <label class="checkbox">
-            <input type="checkbox">
-            <%= image_tag("nodejs_150.png", :alt => "nodejs") %>
-        </label>
-      </div>
     </div>
     <div id="submit-container" style = "margin-top:10px">
       <%= f.button :submit, 'Nuevo proyecto', class: "button is-primary" %>

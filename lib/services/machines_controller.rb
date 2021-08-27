@@ -36,7 +36,10 @@ module Services
       end
 
       if pool_type == "cluster"
-
+        create_machine(machine_params, new_ip, "master", pool)
+        (1 .. pool.slaves).each do |machine|
+          create_machine(machine_params, new_ip, "slave", pool)
+        end
       end
     end
 

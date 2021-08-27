@@ -1,4 +1,5 @@
 ansible:
   default-path: "/etc/ansible/"
   templates-path: "/etc/ansible/templates/"
-  users-path: "/etc/ansible/users/"
+  users-path: "/home/javier/ansible/users/"
+  bin-playbook-path: "/usr/bin/ansible-playbook"

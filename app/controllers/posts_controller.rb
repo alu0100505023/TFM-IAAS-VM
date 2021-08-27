@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
 
   before_action :require_login
+  @project_type = "simple"
 
   def index
     #@posts=Post.all.order("created_at DESC")
@@ -12,7 +13,8 @@ class PostsController < ApplicationController
   end
 
   def new
-    @post=Post.new
+    @@project_type = "simple"
+    @post = Post.new
   end
 
 
@@ -24,6 +26,40 @@ class PostsController < ApplicationController
   end
 
   def create
+    @vm = Services::Ansible.new()
+    pool_params = params[:pool]
+    machines_params = params[:machine]
+    params = post_params
+    params[:email] = current_user.email
+
+    Rails.logger.info params[:pool]
+    Rails.logger.info "Tipo de proyecto: " + @@project_type
+
+    @post = Post.new(params)
+
+    if @post.save
+      pool = create_pool(pool_params)
+      if @pool.save
+        create_machines(machines_params, @@project_type, @pool)
+        @machines = Machine.where(:pool => @pool)
+        @vm.create_pool_directory(current_user.email, @pool)
+        @vm.ansible_variable_yml(@pool, @machines)
+        redirect_to @post
+        @vm.run_create_machines(current_user.email, @pool)
+      else
+        render 'new'
+      end
+    else
+      render 'new'
+    end
+  end
+
+  def new_cluster
+    @@project_type = "cluster"
+    @post = Post.new
+  end
+
+  def create_cluster
     @vm = Services::Ansible.new()
     pool_params = params[:pool]
     machines_params = params[:machine]
@@ -49,8 +85,6 @@ class PostsController < ApplicationController
       render 'new'
     end
   end
-
-
 
   def show
     #@post= Post.find(params[:id])

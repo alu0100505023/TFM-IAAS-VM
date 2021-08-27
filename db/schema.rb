@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_14_092134) do
+ActiveRecord::Schema.define(version: 2020_08_14_092135) do
 
   create_table "machines", force: :cascade do |t|
     t.string "ip"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2020_08_14_092134) do
     t.integer "pool_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
     t.index ["pool_id"], name: "index_machines_on_pool_id"
   end
 
