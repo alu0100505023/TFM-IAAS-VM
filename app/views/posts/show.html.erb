@@ -1,18 +1,61 @@
-<div id="show-container" style="margin-left:40px; margin-bottom:20px">
-    <section class="section">
-      <div class="container" style = "float:left">
-        <h1 class="title">
-          <%= @post.title %>
-          </h1>
-        <div class="content">
-          <%= @post.content %>
+<style>
+    pre.bash {
+      background-color: black;
+      color: white;
+      font-size: medium ;
+      font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+      width: 80%;
+      display: inline-block;
+    }
+</style>
+<div class = "columns">
+    <div class ="column is-half">
+        <div id="show-container" style="margin-left:40px; margin-bottom:20px">
+            <section class="section">
+              <div class="container" style = "float:left">
+                <h1 class="title">
+                  <%= @post.title %>
+                  </h1>
+                <div class="content">
+                  <%= @post.content %>
+                </div>
+              </div>
+            </section>
+
+            <section class="section">
+              <%= render partial: "pool", locals: {pool: @pool, machine: @machines.first} %>
+            </section>
+            <section class="section">
+              <%= render partial: "machine", locals: {machines: @machines} %>
+            </section>
         </div>
-      </div>
-    </section>
-    <section class="section">
-      <%= render partial: "pool", locals: {pool: @pool, machine: @machines.first} %>
-    </section>
-    <section class="section">
-      <%= render partial: "machine", locals: {machines: @machines} %>
-    </section>
+    </div>
+    <div class ="column is-half">
+        <div id = "output-container" >
+            <section class="section">
+              <div class="container">
+                  <pre class="bash">
+                      <code id = "output-code">Waiting for configuration</code>
+                  </pre>
+              </div>
+            </section>
+        </div>
+    </div>
 </div>
+<script>
+     var intervalId = window.setInterval(function(){
+        $.ajax({
+               url: '/get_output',
+               type: 'GET',
+               success: function(data){
+                 console.log(data);
+                 document.getElementById("output-code").innerHTML = data;
+               },
+               error: function(data){
+                 console.log(data.responseText);
+                 document.getElementById("output-code").innerHTML = data.responseText;
+               }
+           });
+     }, 5000);
+
+</script>

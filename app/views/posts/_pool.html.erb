@@ -1,11 +1,11 @@
-<div class="content" style ="margin-top:10px; width:25%">
+<div class="content" style ="margin-top:10px;">
     <h2>Info</h1>
-    <div class = "columns is-desktop is-half-desktop">
+    <div class = "columns is-half">
         <div class = "column">
             <p>Numero de maquinas: <%= pool.slaves + pool.masters %></p>
             <p>Cluster: <%= pool.cluster %></p>
             <p>Almacenamiento: <%= pool.storage_domain %></p>
-            <p>Tipo de proyecto: <%= machine.machine_type %></p>
+            <p>Tipo de proyecto: <%= pool.pool_type %></p>
         </div>
         <div class = "column">
             <p>Plantilla: <%= pool.template %></p>

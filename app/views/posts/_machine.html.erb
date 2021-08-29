@@ -5,15 +5,16 @@
             <article class = "media">
                 <% if machine.machine_type == 'simple' %>
                     <div class="media-left">
-                     <span class="icon is-medium has-text-info">
-                        <i class="fas fa-desktop fa-2x"></i>
-                     </span>
+                         <span class="icon is-medium has-text-info">
+                            <i class="fas fa-desktop fa-2x"></i>
+                         </span>
                      </div>
                 <% end %>
                 <div class = "media-content">
                     <div class="content">
                         <p> <%= machine.name %> </p>
                         <p> <%= machine.ip %> </p>
+                        <p> <%= machine.external_ip %> </p>
                     </div>
                 </div>
             </article>

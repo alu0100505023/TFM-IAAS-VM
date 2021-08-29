@@ -24,9 +24,57 @@ module Services
     end
 
     def run_create_machines(user, pool)
-      #`sudo /usr/bin/ansible-playbook #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml`
-      fork { exec("sudo /usr/bin/ansible-playbook #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml") }
-      #system("sudo /usr/bin/ansible-playbook #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml")
+      vm_output = "#{ANSIBLE_USERS}/#{user}/#{pool.id}/logs/log"
+      cookbooks = Services::Cookbooks.new
+      machines = Machine.where(:pool => @pool)
+      Rails.logger.info pool.pool_type
+
+      if pool.pool_type == "cluster"
+        #ansible_spark_eth_variable(user, pool, machines)
+        #
+        #
+        #
+
+        #Thread.new do
+        # execution_context = Rails.application.executor.run!
+          # your code here
+        # exec("sudo #{ANSIBLE_PLAYBOOK} #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml >> #{vm_output}; sleep 10; #{ANSIBLE_PLAYBOOK} -i #{ANSIBLE_USERS}/#{user}/#{pool.id}/cluster-hosts  #{ANSIBLE_USERS}/#{user}/#{pool.id}/get-external-ip.yml >> #{vm_output}")
+        # get_external_ip(user, pool, machines)
+        # ansible_spark_eth_variable(user, pool, machines)
+        # cookbooks.spark_cookbook(user, pool)
+        #ensure
+        # execution_context.complete! if execution_context
+        #end
+        #Thread.new do
+        # exec("sudo #{ANSIBLE_PLAYBOOK} #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml >> #{vm_output}; sleep 10; #{ANSIBLE_PLAYBOOK} -i #{ANSIBLE_USERS}/#{user}/#{pool.id}/cluster-hosts  #{ANSIBLE_USERS}/#{user}/#{pool.id}/get-external-ip.yml >> #{vm_output}")
+        # get_external_ip(user, pool, machines)
+        # ansible_spark_eth_variable(user, pool, machines)
+        # cookbooks.spark_cookbook(user, pool)
+        #end
+
+        fork do
+          exec("sudo #{ANSIBLE_PLAYBOOK} #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml >> #{vm_output}; sleep 10; #{ANSIBLE_PLAYBOOK} -i #{ANSIBLE_USERS}/#{user}/#{pool.id}/cluster-hosts  #{ANSIBLE_USERS}/#{user}/#{pool.id}/get-external-ip.yml >> #{vm_output}")
+          get_external_ip(user, pool, machines)
+          ansible_spark_eth_variable(user, pool, machines)
+          cookbooks.spark_cookbook(user, pool)
+          exit
+        end
+      else
+        fork do
+          exec("sudo #{ANSIBLE_PLAYBOOK} #{ANSIBLE_USERS}/#{user}/#{pool.id}/create-vm.yml >> #{vm_output}; sleep 10; #{ANSIBLE_PLAYBOOK} -i #{ANSIBLE_USERS}/#{user}/#{pool.id}/cluster-hosts  #{ANSIBLE_USERS}/#{user}/#{pool.id}/get-external-ip.yml >> #{vm_output}")
+          exit
+        end
+      end
+    end
+
+    def get_output(user, pool)
+      vm_output = "#{ANSIBLE_USERS}/#{user}/#{pool.id}/logs/log"
+      Rails.logger.info vm_output
+      if File.exist?(vm_output)
+        return File.read(vm_output)
+      else
+        return "Ansible Server Not Found"
+      end
     end
 
     def create_user_directory(user)
@@ -42,13 +90,13 @@ module Services
     def create_pool_directory(user, pool)
       unless File.exist?("#{ANSIBLE_USERS}#{user}/#{pool.id}")
         `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}`
-        `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/external-ip`
-        `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/cluster-hosts`
-        `cp #{ANSIBLE_TEMPLATES}login-vars.yml #{ANSIBLE_USERS}#{user}/#{pool.id}`
-        `cp #{ANSIBLE_TEMPLATES}create-vm.yml #{ANSIBLE_USERS}#{user}/#{pool.id} `
       end
+      `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/external-ip`
+      `mkdir #{ANSIBLE_USERS}#{user}/#{pool.id}/logs`
+      `touch #{ANSIBLE_USERS}#{user}/#{pool.id}/cluster-hosts`
       `cp #{ANSIBLE_TEMPLATES}login-vars.yml #{ANSIBLE_USERS}#{user}/#{pool.id}`
-      `cp #{ANSIBLE_TEMPLATES}create-vm.yml #{ANSIBLE_USERS}#{user}/#{pool.id} `
+      `cp -r #{ANSIBLE_TEMPLATES}vm/. #{ANSIBLE_USERS}#{user}/#{pool.id}/`
+      `cp -r #{ANSIBLE_TEMPLATES}spark/. #{ANSIBLE_USERS}#{user}/#{pool.id}/`
     end
 
     def write_vars_template(user,pool,data)
@@ -58,7 +106,30 @@ module Services
       File.open("#{ANSIBLE_USERS}#{user}/#{pool.id}/vm-vars.yml", "w") { |file| file.write(data.to_yaml) }
     end
 
-    def ansible_variable_yml(pool, machines)
+    def write_spark_vars_template(user, pool, data)
+      unless File.exist?("#{ANSIBLE_USERS}#{user}/#{pool.id}/ext_ip_vars.yml")
+        `touch #{ANSIBLE_USERS}#{user}/#{pool.id}/ext_ip_vars.yml`
+      end
+      File.open("#{ANSIBLE_USERS}#{user}/#{pool.id}/ext_ip_vars.yml", "w") { |file| file.write(data.to_yaml) }
+    end
+
+    def ansible_spark_eth_variable(user, pool, machines)
+      vm = {"wn_eth" => [], "slaves_eth"=> []}
+      storage_domain = pool.storage_domain
+      machines.each_with_index do |machine, index|
+        if machine.machine_type == "master"
+          vm["spark_master"] == machine.ip
+        end
+        vm["wn_eth"].push{{"name" => "#{storage_domain}-#{machine.machine_type}-#{index}", "ip" => machine.external_ip}}
+        if machine.machine_type == "slave"
+          vm["slaves_eth"].push{{"name" => "#{storage_domain}-#{machine.machine_type}-#{index}", "ip" => machine.external_ip}}
+        end
+      end
+      Rails.logger.info vm.to_yaml
+      write_spark_vars_template(pool.post.email,pool,vm)
+    end
+
+    def ansible_variable_yml(user, pool, machines)
       master = pool.masters
       slaves = pool.slaves
       storage_domain = pool.storage_domain
@@ -79,28 +150,18 @@ module Services
       vm["cluster"] = pool.cluster
       vm["cpu"] = template_machine.cpu
 
-      if pool_type == "cluster"
-        machines.each_with_index do |machine, index|
-          vm["wn"].push({"name" => "#{storage_domain}-#{machine.machine_type}-#{index}", "ip" => machine.ip})
-          #machine.update(:name => "#{storage_domain}-#{machine.machine_type}-#{index}")
-          #machine.save!
-          Machine.find_by(id machine.id).update(name: "#{storage_domain}-#{machine.machine_type}-#{index}")
-        end
 
-        #slaves.each do |vm|
-        # vm["vm"].push({"name" => "#{storage_domain}-SLAVES-#{name}", "ip" => machine.ip})
-        #end
-      else
-        machines.each_with_index do |machine, index|
-          vm["wn"].push({"name" => "#{storage_domain}-pool#{pool.id}-#{machine.machine_type}-#{index}", "ip" => machine.ip})
-          Machine.find_by(id: machine.id).update(name: "#{storage_domain}-pool#{pool.id}-#{machine.machine_type}-#{index}")
-        end
-        write_vars_template(pool.post.email,pool,vm)
+      machines.each_with_index do |machine, index|
+        vm["wn"].push({"name" => "#{storage_domain}-pool#{pool.id}-#{machine.machine_type}-#{index}", "ip" => machine.ip})
+        Machine.find_by(id: machine.id).update(name: "#{storage_domain}-pool#{pool.id}-#{machine.machine_type}-#{index}")
       end
+      write_vars_template(pool.post.email,pool,vm)
+
 
       Rails.logger.info vm
       Rails.logger.info "\n"
       Rails.logger.info vm.to_yaml
+      hosts_inventory(user, pool, machines)
     end
 
     def hosts_inventory(user, pool, machines)
@@ -149,10 +210,13 @@ module Services
       check.ping?
     end
 
-    def get_external_ip(machines)
+    def get_external_ip(user, pool, machines)
       machines.each do |machine|
         if machine.external_ip == nil
-            file =  machine.ip
+          if File.exist?("#{ANSIBLE_USERS}#{user}/#{pool.id}/external-ip/#{machine.ip}")
+            ip = File.read("#{ANSIBLE_USERS}#{user}/#{pool.id}/external-ip/#{machine.ip}")
+            Machine.find_by(id: machine.id).update(external_ip: ip)
+          end
         end
       end
     end

@@ -26,23 +26,6 @@
   </div>
 </section>
 
-<script>
-  function callAnsible(){
-    $.ajax({
-        url: '/createVM',
-        type: 'GET',
-        success: function(data){
-          console.log(data);
-          document.getElementById("output").innerHTML=data;
-        },
-        error: function(data){
-          console.log(data.responseText);
-          document.getElementById("output").innerHTML=data.responseText;
-        }
-    });
-  }
-</script>
-
 <section class="section">
   <div class="container">
     <% @posts.each do |post| %>

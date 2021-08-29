@@ -2,6 +2,7 @@ class PostsController < ApplicationController
 
   before_action :require_login
   @project_type = "simple"
+  @current_post, @current_pool = nil
 
   def index
     #@posts=Post.all.order("created_at DESC")
@@ -17,6 +18,11 @@ class PostsController < ApplicationController
     @post = Post.new
   end
 
+  def get_output
+    @vm = Services::Ansible.new()
+    @response = @vm.get_output(@@current_post.email, @@current_pool)
+    render json: @response
+  end
 
   def createVM
     @vm = Services::Ansible.new()
@@ -27,13 +33,14 @@ class PostsController < ApplicationController
 
   def create
     @vm = Services::Ansible.new()
+    @ck = Services::Cookbooks.new()
     pool_params = params[:pool]
+    pool_params[:pool_type] = @@project_type
     machines_params = params[:machine]
     params = post_params
     params[:email] = current_user.email
 
     Rails.logger.info params[:pool]
-    Rails.logger.info "Tipo de proyecto: " + @@project_type
 
     @post = Post.new(params)
 
@@ -43,8 +50,10 @@ class PostsController < ApplicationController
         create_machines(machines_params, @@project_type, @pool)
         @machines = Machine.where(:pool => @pool)
         @vm.create_pool_directory(current_user.email, @pool)
-        @vm.ansible_variable_yml(@pool, @machines)
+        @vm.ansible_variable_yml(current_user.email, @pool, @machines)
+
         redirect_to @post
+
         @vm.run_create_machines(current_user.email, @pool)
       else
         render 'new'
@@ -89,9 +98,13 @@ class PostsController < ApplicationController
   def show
     #@post= Post.find(params[:id])
     url = Post.find(params[:id])
-
+    @vm = Services::Ansible.new()
     @pool = Pool.find_by(:post => url)
     @machines = Machine.where(:pool => @pool)
+    @vm.get_external_ip(current_user.email, @pool, @machines)
+
+    @@current_post = url
+    @@current_pool = @pool
     if url[:email] == current_user.email then
       @post = url
     else
@@ -104,7 +117,7 @@ class PostsController < ApplicationController
   def create_pool(pool_params)
     Rails.logger.info pool_params
     @pool = Pool.new(:storage_domain => pool_params["storage_domain"], :cluster => pool_params[:cluster], :template => pool_params[:template], :instance_type => "xl",
-                     :masters => 1, :slaves => pool_params["slaves"], :post=> @post)
+                     :masters => 1, :slaves => pool_params["slaves"], :pool_type => pool_params[:pool_type], :post=> @post)
   end
 
   def create_machines(machines_params, machines_type, pool)
